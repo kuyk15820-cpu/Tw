@@ -5,31 +5,17 @@ import './info-style.css';
 export default function UdidInfo() {
   const [udidText, setUdidText] = useState('');
   const [targetUDID, setTargetUDID] = useState('N/A');
-  const [isCopying, setIsCopying] = useState(false);
-  const [isScrambling, setIsScrambling] = useState(true);
 
   const isScramblingRef = useRef(true);
   const isCopyingRef = useRef(false);
 
   useEffect(() => {
-    isScramblingRef.current = isScrambling;
-  }, [isScrambling]);
-
-  useEffect(() => {
-    isCopyingRef.current = isCopying;
-  }, [isCopying]);
-
-  useEffect(() => {
-    // 1. อ่านค่า data จาก query string หรือ hash (#data=)
+    // อ่านค่า data จาก URL (query string หรือ hash)
     const urlParams = new URLSearchParams(window.location.search);
     let encodedData = urlParams.get('data');
 
     if (!encodedData && window.location.hash) {
-      // ตัด # ออก แล้วดึงค่า data
-      const hashString = window.location.hash.startsWith('#') 
-        ? window.location.hash.substring(1) 
-        : window.location.hash;
-      const hashParams = new URLSearchParams(hashString);
+      const hashParams = new URLSearchParams(window.location.hash.substring(1));
       encodedData = hashParams.get('data');
     }
 
@@ -40,18 +26,15 @@ export default function UdidInfo() {
         const jsonString = atob(decodeURIComponent(encodedData));
         deviceData = JSON.parse(jsonString);
 
-        // บันทึกสำรองไว้ใน LocalStorage
         localStorage.setItem('udid_device_backup', JSON.stringify(deviceData));
 
-        // เคลียร์ URL ให้สะอาด
         if (window.history.replaceState) {
-          window.history.replaceState(null, null, '/udid-info/');
+          window.history.replaceState(null, null, '/udid-info#data=' + encodeURIComponent(encodedData));
         }
       } catch (e) {
         console.error('Decode Error:', e);
       }
     } else {
-      // ดึงจาก Backup หากไม่มี Parameter ใน URL
       const backup = localStorage.getItem('udid_device_backup');
       if (backup) {
         try {
@@ -65,20 +48,20 @@ export default function UdidInfo() {
     const finalUDID = deviceData && deviceData.udid ? deviceData.udid : 'N/A';
     setTargetUDID(finalUDID);
 
+    // scrambleEffect ฟังก์ชันแบบเดียวกับตัวอย่าง
     if (finalUDID === 'N/A') {
       setUdidText('N/A');
-      setIsScrambling(false);
+      isScramblingRef.current = false;
       return;
     }
 
-    // 2. Animation ตัวอักษรสุ่มแบบ Hacker Effect ด้วย GSAP
-    setIsScrambling(true);
-    const chars = '0123456789ABCDEF-';
+    isScramblingRef.current = true;
+    const chars = '0123456789ABCDEF'; // ตัวอักษรสุ่มเป๊ะตามตัวอย่าง
     const obj = { progress: 0 };
 
     const tween = gsap.to(obj, {
       progress: 1,
-      duration: 2.2,
+      duration: 2.5, // 2.5 วินาทีเป๊ะตามตัวอย่าง
       ease: 'power1.inOut',
       onUpdate: () => {
         const revealedLength = Math.floor(obj.progress * finalUDID.length);
@@ -90,8 +73,7 @@ export default function UdidInfo() {
         setUdidText(result);
       },
       onComplete: () => {
-        setUdidText(finalUDID);
-        setIsScrambling(false);
+        isScramblingRef.current = false;
       }
     });
 
@@ -102,8 +84,8 @@ export default function UdidInfo() {
 
   const handleCopy = () => {
     if (isCopyingRef.current || isScramblingRef.current || targetUDID === 'N/A') return;
-
-    setIsCopying(true);
+    
+    isCopyingRef.current = true;
 
     if (navigator.clipboard && window.isSecureContext) {
       navigator.clipboard.writeText(targetUDID);
@@ -120,7 +102,7 @@ export default function UdidInfo() {
 
     setTimeout(() => {
       setUdidText(targetUDID);
-      setIsCopying(false);
+      isCopyingRef.current = false;
     }, 1500);
   };
 
