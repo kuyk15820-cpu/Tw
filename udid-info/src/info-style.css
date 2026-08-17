@@ -1,0 +1,103 @@
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-user-drag: none;
+    -khtml-user-drag: none;
+    -moz-user-drag: none;
+    -o-user-drag: none;
+}
+
+html, body {
+    min-height: 100%;
+    width: 100%;
+}
+
+#root {
+    width: 100%;
+    min-height: 100vh;
+    min-height: 100dvh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+body {
+    background-color: #000000;
+    color: #00ff00;
+    font-family: "Courier New", Courier, monospace;
+    padding: 15px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    min-height: 100dvh;
+    overflow-y: auto;
+}
+
+.wrapper {
+    width: 100%;
+    max-width: 440px;
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.title-container {
+    margin-bottom: 8px;
+    text-align: center;
+}
+
+.title {
+    color: #00ff00;
+    font-size: 15px;
+    font-weight: bold;
+    letter-spacing: 1px;
+    text-shadow: 0 0 8px rgba(0, 255, 0, 0.6);
+    white-space: nowrap;
+}
+
+.terminal-box {
+    border: 2px solid #00ff00;
+    color: #00ff00;
+    background-color: #000000;
+    padding: 10px 14px;
+    font-size: 11.5px;
+    box-shadow: 0 0 15px rgba(0, 255, 0, 0.3), inset 0 0 8px rgba(0, 255, 0, 0.15);
+    letter-spacing: 0.8px;
+    width: 100%;
+    min-width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    white-space: nowrap;
+    overflow: hidden;
+    cursor: pointer;
+}
+
+.udid-text {
+    display: inline-block;
+    white-space: nowrap;
+    text-align: center;
+    width: 100%;
+}
+
+@media (max-width: 400px) {
+    .title {
+        font-size: 13px;
+        letter-spacing: 0.8px;
+    }
+    .terminal-box {
+        font-size: 9.5px;
+        letter-spacing: 0.4px;
+        padding: 8px 10px;
+    }
+}

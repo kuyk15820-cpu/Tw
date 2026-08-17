@@ -1,0 +1,286 @@
+@import './fonts.css';
+
+*, *::before, *::after { 
+  box-sizing: border-box; 
+  margin: 0; 
+  padding: 0; 
+
+  -webkit-tap-highlight-color: transparent !important;
+  -webkit-tap-highlight-color: rgba(0,0,0,0) !important;
+  
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  -khtml-user-select: none !important;
+  -moz-user-select: none !important;
+  -ms-user-select: none !important;
+  user-select: none !important;
+
+  -webkit-user-drag: none !important;
+  -khtml-user-drag: none !important;
+  -moz-user-drag: none !important;
+  -o-user-drag: none !important;
+
+  outline: none !important;
+}
+
+html, body {
+  min-height: 100%;
+  width: 100%;
+  background-color: var(--bg);
+  /* เพิ่มการป้องกันการเลือกข้อความในระดับราก */
+  -webkit-touch-callout: none !important;
+  -webkit-user-select: none !important;
+  user-select: none !important;
+}
+
+:root {
+  --bg:        #0d0d14;
+  --surface:   #16161f;
+  --surface2:  #1e1e2a;
+  --border:    rgba(255,255,255,.08);
+  --text:      #f0f0f5;
+  --muted:     #9898ac;
+  --accent1:   #bf85ff;
+  --accent2:   #5eb7ff;
+  --accent3:   #ff7eb3;
+  --radius:    18px;
+}
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  min-height: 100vh;
+  min-height: 100dvh;
+  padding-bottom: 60px;
+  overflow-y: auto;
+}
+
+/* ── Hero ─────────────────────────────────────── */
+.hero {
+  text-align: center;
+  padding: 48px 24px 0;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.hero-logo {
+  width: 96px;
+  height: 96px;
+  border-radius: 26px;
+  box-shadow: 0 8px 40px rgba(191,133,255,.35), 0 2px 8px rgba(0,0,0,.6);
+  margin-bottom: 20px;
+  /* เพิ่มสองบรรทัดนี้เพื่อบล็อกการกดค้าง Save/Preview รูปภาพ */
+  pointer-events: none !important;
+  -webkit-user-drag: none !important;
+}
+
+.hero h1 {
+  font-size: clamp(1.8rem, 5vw, 2.8rem);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  background: linear-gradient(135deg, var(--accent2) 0%, var(--accent1) 50%, var(--accent3) 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  margin-bottom: 8px;
+}
+
+.hero p {
+  color: var(--muted);
+  font-size: 1rem;
+  margin-bottom: 0;
+}
+
+/* ── Divider ──────────────────────────────────── */
+.divider {
+  margin: 32px auto 0;
+  width: 40px;
+  height: 2px;
+  background: #222;
+  border-radius: 1px;
+}
+
+.section-header {
+  max-width: 680px;
+  margin: 24px auto 16px;
+  padding: 0 20px;
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+.section-header h2 {
+  font-size: 1.15rem;
+  font-weight: 600;
+  color: var(--text);
+}
+.section-header .badge {
+  font-size: .75rem;
+  font-weight: 600;
+  padding: 2px 8px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 20px;
+  color: var(--muted);
+}
+
+/* ── Package cards ────────────────────────────── */
+.pkg-grid {
+  max-width: 680px;
+  margin: 0 auto;
+  padding: 0 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  -webkit-tap-highlight-color: transparent !important;
+}
+
+.pkg-card {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  transition: background .15s, border-color .15s;
+  -webkit-tap-highlight-color: transparent !important;
+  outline: none !important;
+}
+
+.pkg-card:hover,
+.pkg-card:active,
+.pkg-card:focus,
+.pkg-card:focus-visible,
+.pkg-card:focus-within {
+  background: var(--surface);
+  border-color: var(--border);
+  outline: none !important;
+  box-shadow: none !important;
+  transform: none;
+}
+
+.pkg-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 13px;
+  flex-shrink: 0;
+  background: var(--surface2);
+  /* เพิ่มสองบรรทัดนี้เพื่อบล็อกการกดค้าง Save/Preview ไอคอนแพ็กเกจ */
+  pointer-events: none !important;
+  -webkit-user-drag: none !important;
+}
+
+.pkg-info { flex: 1; min-width: 0; }
+
+.pkg-name {
+  font-weight: 600;
+  font-size: 1rem;
+  white-space: normal;
+  word-break: break-word;
+}
+
+/* ใช้ฟอนต์ Semakin + สีเหลืองเข้มสำหรับข้อความ Server */
+.pkg-server-text {
+  color: #e3b341;
+  font-family: 'Semakin', -apple-system, BlinkMacSystemFont, sans-serif;
+  font-weight: 600;
+}
+
+.pkg-version {
+  color: var(--muted);
+  font-size: .875rem;
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+.pkg-bundle {
+  color: var(--muted);
+  font-size: .875rem;
+  margin-top: 2px;
+  line-height: 1.4;
+}
+
+/* ── Tags Container ── */
+.pkg-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 5px;
+}
+
+.pkg-price {
+  display: inline-block;
+  font-size: .75rem;
+  color: var(--accent1);
+  background: rgba(191,133,255,.12);
+  border-radius: 4px;
+  padding: 1px 7px;
+}
+
+.pkg-type {
+  display: inline-block;
+  font-size: .75rem;
+  color: #4cd964;
+  background: rgba(76,217,100,.12);
+  border-radius: 4px;
+  padding: 1px 7px;
+}
+
+.pkg-type.price-pro,
+.price-pro {
+  color: #ffd700 !important;
+  background: rgba(255, 215, 0, 0.12) !important;
+}
+
+.pkg-type.tool,
+.tool {
+  color: #3b82f6 !important;
+  background: rgba(59, 130, 246, 0.12) !important;
+}
+
+/* ── Footer ───────────────────────────────────── */
+footer {
+  text-align: center;
+  margin-top: 24px;
+  color: var(--muted);
+  font-size: .8rem;
+}
+footer a { color: var(--accent2); text-decoration: none; }
+
+/* ── Skeleton Loaders ─────────────────────────── */
+@keyframes animate-pulse {
+  0%, 100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+.animate-pulse {
+  animation: animate-pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.skeleton-logo {
+  width: 96px;
+  height: 96px;
+  border-radius: 26px;
+  background-color: var(--surface2);
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+.skeleton-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 13px;
+  flex-shrink: 0;
+  background-color: var(--surface2);
+}
