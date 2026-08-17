@@ -1,16 +1,15 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useEffect, useRef } from 'react';
 import gsap from 'gsap';
 import './info-style.css';
 
 export default function UdidInfo() {
-  const [udidText, setUdidText] = useState('');
-  const [targetUDID, setTargetUDID] = useState('N/A');
-
-  const isScramblingRef = useRef(true);
+  const udidRef = useRef(null);
+  const targetUDIDRef = useRef('N/A');
   const isCopyingRef = useRef(false);
+  const isScramblingRef = useRef(true);
 
   useEffect(() => {
-    // อ่านค่า data จาก URL (query string หรือ hash)
+    // 1. ดึงข้อมูลจาก URL (Query Parameter หรือ Hash)
     const urlParams = new URLSearchParams(window.location.search);
     let encodedData = urlParams.get('data');
 
@@ -45,32 +44,35 @@ export default function UdidInfo() {
       }
     }
 
-    const finalUDID = deviceData && deviceData.udid ? deviceData.udid : 'N/A';
-    setTargetUDID(finalUDID);
+    const targetUDID = deviceData && deviceData.udid ? deviceData.udid : 'N/A';
+    targetUDIDRef.current = targetUDID;
 
-    // scrambleEffect ฟังก์ชันแบบเดียวกับตัวอย่าง
-    if (finalUDID === 'N/A') {
-      setUdidText('N/A');
+    const element = udidRef.current;
+    if (!element) return;
+
+    // 2. ฟังก์ชัน Scramble Direct DOM แบบเดียวกับตัวอย่าง 100%
+    if (targetUDID === 'N/A') {
+      element.innerText = 'N/A';
       isScramblingRef.current = false;
       return;
     }
 
     isScramblingRef.current = true;
-    const chars = '0123456789ABCDEF'; // ตัวอักษรสุ่มเป๊ะตามตัวอย่าง
+    const chars = '0123456789ABCDEF';
     const obj = { progress: 0 };
 
     const tween = gsap.to(obj, {
       progress: 1,
-      duration: 2.5, // 2.5 วินาทีเป๊ะตามตัวอย่าง
+      duration: 2.5,
       ease: 'power1.inOut',
       onUpdate: () => {
-        const revealedLength = Math.floor(obj.progress * finalUDID.length);
-        let result = finalUDID.substring(0, revealedLength);
+        const revealedLength = Math.floor(obj.progress * targetUDID.length);
+        let result = targetUDID.substring(0, revealedLength);
 
-        for (let i = revealedLength; i < finalUDID.length; i++) {
+        for (let i = revealedLength; i < targetUDID.length; i++) {
           result += chars.charAt(Math.floor(Math.random() * chars.length));
         }
-        setUdidText(result);
+        element.innerText = result;
       },
       onComplete: () => {
         isScramblingRef.current = false;
@@ -83,8 +85,10 @@ export default function UdidInfo() {
   }, []);
 
   const handleCopy = () => {
-    if (isCopyingRef.current || isScramblingRef.current || targetUDID === 'N/A') return;
-    
+    const targetUDID = targetUDIDRef.current;
+    const element = udidRef.current;
+
+    if (isCopyingRef.current || isScramblingRef.current || targetUDID === 'N/A' || !element) return;
     isCopyingRef.current = true;
 
     if (navigator.clipboard && window.isSecureContext) {
@@ -98,10 +102,10 @@ export default function UdidInfo() {
       document.body.removeChild(textArea);
     }
 
-    setUdidText('Copied to clipboard');
+    element.innerText = 'Copied to clipboard';
 
     setTimeout(() => {
-      setUdidText(targetUDID);
+      element.innerText = targetUDID;
       isCopyingRef.current = false;
     }, 1500);
   };
@@ -113,9 +117,7 @@ export default function UdidInfo() {
       </div>
 
       <div className="terminal-box" id="terminalBox" onClick={handleCopy}>
-        <span className="udid-text" id="udidText">
-          {udidText}
-        </span>
+        <span className="udid-text" id="udidText" ref={udidRef}></span>
       </div>
     </div>
   );
